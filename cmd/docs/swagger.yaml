@@ -1,0 +1,203 @@
+definitions:
+  SongCreate:
+    properties:
+      group:
+        type: string
+      link:
+        type: string
+      releaseDate:
+        description: wewe
+        type: string
+      song:
+        type: string
+      text:
+        type: string
+    type: object
+  SongDescription:
+    properties:
+      group:
+        type: string
+      link:
+        type: string
+      releaseDate:
+        type: string
+      song:
+        type: string
+    type: object
+  SongDetail:
+    properties:
+      link:
+        type: string
+      releaseDate:
+        type: string
+      text:
+        type: string
+    type: object
+  SongUpdate:
+    properties:
+      group:
+        type: string
+      link:
+        type: string
+      releaseDate:
+        type: string
+      song:
+        type: string
+      text:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is a simple API for managing home music library.
+  title: Home Music Library API
+  version: "1.0"
+paths:
+  /song:
+    post:
+      consumes:
+      - application/json
+      description: Добавляет новую песню
+      parameters:
+      - description: Данные о песне в формате JSON
+        in: body
+        name: song
+        required: true
+        schema:
+          $ref: '#/definitions/SongCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Сообщение о успешном добавлении песни
+          schema:
+            type: string
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+      summary: Добавить новую песню
+  /song/:
+    delete:
+      description: 'Удаляет песню по указанным параметрам: group и name.'
+      parameters:
+      - in: query
+        name: group
+        type: string
+      - in: query
+        name: song
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Сообщение об успешном удалении песни
+          schema:
+            type: string
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+      summary: Удалить песню
+    put:
+      consumes:
+      - application/json
+      description: Добавляет новую песню
+      parameters:
+      - description: Данные о песне в формате JSON
+        in: body
+        name: song
+        required: true
+        schema:
+          $ref: '#/definitions/SongUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Сообщение о успешном добавлении песни
+          schema:
+            type: string
+        "400":
+          description: Ошибка при обработке запроса
+          schema:
+            type: string
+      summary: Обновляет песню с заданным названием и группой
+  /song/info:
+    get:
+      description: Получение информации о песне по заданной группе и названию
+      parameters:
+      - in: query
+        name: group
+        type: string
+      - in: query
+        name: song
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SongDetail'
+      summary: Получение информации о песне
+  /song/search:
+    get:
+      description: Поиск песни по заданным параметрам
+      parameters:
+      - in: query
+        name: group
+        type: string
+      - in: query
+        name: link
+        type: string
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: releaseDate
+        type: string
+      - in: query
+        name: song
+        type: string
+      - in: query
+        name: text
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/SongDescription'
+            type: array
+      summary: Поиск песни
+  /song/verses:
+    get:
+      description: Получение куплетов песни по заданным параметрам
+      parameters:
+      - in: query
+        name: group
+        type: string
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: song
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+      summary: Получение текста песни
+swagger: "2.0"
