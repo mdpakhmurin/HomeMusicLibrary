@@ -14,6 +14,6 @@ func (r *SongRouter) Route(route *gin.Engine) {
 	route.PUT("/song", Controller.SongUpdate)
 	route.DELETE("/song", Controller.SongDelete)
 	route.GET("/song/search", Controller.SongSearch)
-	route.GET("/song/info", Controller.SongGet)
+	route.GET("/song/info", Controller.SongInfo)
 	route.GET("/song/verses", Controller.SongVersesGet)
 }

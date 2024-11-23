@@ -19,7 +19,7 @@ type SongUpdateViewIn struct {
 } //@name SongUpdate
 
 // View удаления песни
-type SongRemoveViewIn struct {
+type SongDeleteViewIn struct {
 	Group string `form:"group"`
 	Name  string `form:"song"`
 }

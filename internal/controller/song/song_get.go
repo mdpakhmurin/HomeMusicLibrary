@@ -6,49 +6,67 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mdpakhmurin/HomeMusicLibrary/internal/service"
 	log "github.com/sirupsen/logrus"
 )
 
-// SongInfo "Получение песни по группе и названию песни"
-// @Summary Получение информации о песне
-// @Description Получение информации о песне по заданной группе и названию
+// @Summary Получение информации о песни
+// @Description Возвращает информацию о песни на основе входных данных
+// @ID SongInfo
+// @Accept json
 // @Produce json
-// @Param song query SongInfoViewIn true "Данные о песне"
-// @Success 200 {object} SongDetail
+// @Param input query SongInfoViewIn true "Входные данные для получения информации о песне"
+// @Success 200  "Ok"
+// @Failure 400 "Bad request"
+// @Failure 500 "Internal server error"
 // @Router /song/info [get]
-func (controller *SongController) SongGet(c *gin.Context) {
+func (controller *SongController) SongInfo(c *gin.Context) {
 	// Создание общего лога для запроса
-	generalLog := fmt.Sprintf("Запрос %s %v", c.Request.URL.Path, c.Request.URL.Query())
+	generalLog := getGeneralRequestInfo(c)
 	log.Infof(generalLog)
 
 	// Инициализация переменной для входных данных песни
 	var input SongInfoViewIn
 
-	// Проверка и привязка входных данных к переменной input
-	if err := c.ShouldBind(&input); err != nil {
-		// В случае ошибки отправить ответ с кодом ошибки и сообщением об ошибке
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		log.Debugf("%s. Ошибка при получении данных из запроса: %v", generalLog, err)
+	// Получение входных данных
+	err := getRequestData(c, &input)
+	if err != nil {
 		return
 	}
 
-	// Создание структуры песни с данными
-	song := SongInfoViewOut{
-		Text:        "aaaaaaaaaaaaaaaaaaaaaaaaaaa",
-		Link:        "https://2323",
-		ReleaseDate: "02.08.2009",
+	// Получение информации о песни
+	song, err := getSongInfo(c, &input)
+	if err != nil {
+		return
 	}
 
 	// Преобразование структуры песни в формат JSON
 	songJSON, err := json.Marshal(song)
 	if err != nil {
 		// В случае ошибки отправить ответ с кодом ошибки и сообщением об ошибке конвертации
+		log.Debugf("%s. Ошибка конвертации ответа в JSON (%v): %v", generalLog, song, err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка конвертации ответа в JSON"})
-		log.Debugf("%s. Ошибка конвертации ответа (%v): %v", generalLog, song, err)
 		return
 	}
 
 	// Отправка данных JSON в ответе
 	c.Data(http.StatusOK, "application/json", songJSON)
 	log.Infof("%s. Успешный ответ: %v", generalLog, string(songJSON))
+}
+
+// Удаление песни с помощью сервиса
+func getSongInfo(c *gin.Context, songView *SongInfoViewIn) (songResponseView *SongInfoViewOut, err error) {
+	song, err := service.SongService.GetInfoByName(songView.Name, songView.Group)
+	if err != nil {
+		errMsg := fmt.Sprintf("Ошибка получения песни (%s-%s)", songView.Name, songView.Group)
+		log.Debugf("%s. %s. %v", c.Request.URL.Path, errMsg, err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": errMsg})
+		return
+	}
+
+	return &SongInfoViewOut{
+		Text:        song.Text,
+		Link:        song.Link,
+		ReleaseDate: song.ReleaseDate.Format("02.01.2006"),
+	}, nil
 }

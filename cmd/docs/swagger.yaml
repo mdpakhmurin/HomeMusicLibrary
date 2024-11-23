@@ -23,15 +23,6 @@ definitions:
       song:
         type: string
     type: object
-  SongDetail:
-    properties:
-      link:
-        type: string
-      releaseDate:
-        type: string
-      text:
-        type: string
-    type: object
   SongUpdate:
     properties:
       group:
@@ -55,7 +46,8 @@ paths:
     post:
       consumes:
       - application/json
-      description: Создает новую песню на основе входных данных
+      description: Создает новую песню на основе предоставленных входных данных
+      operationId: SongCreate
       parameters:
       - description: Входные данные для создания песни
         in: body
@@ -67,17 +59,18 @@ paths:
       - application/json
       responses:
         "200":
-          description: ID созданной песни
-          schema:
-            type: string
+          description: Ok
         "400":
-          description: Описание ошибки
-          schema:
-            type: string
+          description: Bad request
+        "500":
+          description: Internal server error
       summary: Создание песни
   /song/:
     delete:
-      description: 'Удаляет песню по указанным параметрам: group и name.'
+      consumes:
+      - application/json
+      description: Удаляет песню по указанному идентификатору
+      operationId: SongDelete
       parameters:
       - in: query
         name: group
@@ -89,14 +82,12 @@ paths:
       - application/json
       responses:
         "200":
-          description: Сообщение об успешном удалении песни
-          schema:
-            type: string
+          description: Ok
         "400":
-          description: Ошибка при обработке запроса
-          schema:
-            type: string
-      summary: Удалить песню
+          description: Bad request
+        "500":
+          description: Internal server error
+      summary: Удаление песни
     put:
       consumes:
       - application/json
@@ -122,7 +113,10 @@ paths:
       summary: Обновляет песню с заданным названием и группой
   /song/info:
     get:
-      description: Получение информации о песне по заданной группе и названию
+      consumes:
+      - application/json
+      description: Возвращает информацию о песни на основе входных данных
+      operationId: SongInfo
       parameters:
       - in: query
         name: group
@@ -134,10 +128,12 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/SongDetail'
-      summary: Получение информации о песне
+          description: Ok
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      summary: Получение информации о песни
   /song/search:
     get:
       description: Поиск песни по заданным параметрам

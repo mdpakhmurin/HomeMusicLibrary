@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/song": {
             "post": {
-                "description": "Создает новую песню на основе входных данных",
+                "description": "Создает новую песню на основе предоставленных входных данных",
                 "consumes": [
                     "application/json"
                 ],
@@ -25,6 +25,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "summary": "Создание песни",
+                "operationId": "SongCreate",
                 "parameters": [
                     {
                         "description": "Входные данные для создания песни",
@@ -38,16 +39,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "ID созданной песни",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "Ok"
                     },
                     "400": {
-                        "description": "Описание ошибки",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             }
@@ -89,11 +87,15 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Удаляет песню по указанным параметрам: group и name.",
+                "description": "Удаляет песню по указанному идентификатору",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Удалить песню",
+                "summary": "Удаление песни",
+                "operationId": "SongDelete",
                 "parameters": [
                     {
                         "type": "string",
@@ -108,27 +110,28 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Сообщение об успешном удалении песни",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "Ok"
                     },
                     "400": {
-                        "description": "Ошибка при обработке запроса",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             }
         },
         "/song/info": {
             "get": {
-                "description": "Получение информации о песне по заданной группе и названию",
+                "description": "Возвращает информацию о песни на основе входных данных",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Получение информации о песне",
+                "summary": "Получение информации о песни",
+                "operationId": "SongInfo",
                 "parameters": [
                     {
                         "type": "string",
@@ -143,10 +146,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/SongDetail"
-                        }
+                        "description": "Ok"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             }
@@ -285,20 +291,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "song": {
-                    "type": "string"
-                }
-            }
-        },
-        "SongDetail": {
-            "type": "object",
-            "properties": {
-                "link": {
-                    "type": "string"
-                },
-                "releaseDate": {
-                    "type": "string"
-                },
-                "text": {
                     "type": "string"
                 }
             }
