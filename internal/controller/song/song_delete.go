@@ -12,7 +12,7 @@ import (
 // @Summary Удалить песню
 // @Description Удаляет песню по указанным параметрам: group и name.
 // @Produce json
-// @Param song query SongRemoveDtoIn true "Данные о песне"
+// @Param song query SongRemoveViewIn true "Данные о песне"
 // @Success 200 {object} string "Сообщение об успешном удалении песни"
 // @Failure 400 {object} string "Ошибка при обработке запроса"
 // @Router /song/ [delete]
@@ -22,7 +22,7 @@ func (controller *SongController) SongDelete(c *gin.Context) {
 	log.Infof(generalLog)
 
 	// Инициализация переменной для входных данных удаления песни
-	var input SongRemoveDtoIn
+	var input SongRemoveViewIn
 
 	// Проверка и привязка входных данных к переменной input
 	if err := c.ShouldBind(&input); err != nil {

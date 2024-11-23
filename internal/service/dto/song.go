@@ -1,31 +1,33 @@
-package song
+package dto
 
-// View создания песни
-type SongCreateViewIn struct {
+import "time"
+
+// DTO создания песни
+type SongCreateDtoIn struct {
+	Group       string
+	Name        string
+	Text        string
+	Link        string
+	ReleaseDate time.Time
+}
+
+// DTO обновления песни
+type SongUpdateDtoIn struct {
 	Group       string `json:"group"`
 	Name        string `json:"song"`
 	Text        string `json:"text"`
 	Link        string `json:"link"`
 	ReleaseDate string `json:"releaseDate"`
-} //@name SongCreate
+}
 
-// View обновления песни
-type SongUpdateViewIn struct {
-	Group       string `json:"group"`
-	Name        string `json:"song"`
-	Text        string `json:"text"`
-	Link        string `json:"link"`
-	ReleaseDate string `json:"releaseDate"`
-} //@name SongUpdate
-
-// View удаления песни
-type SongRemoveViewIn struct {
+// DTO удаления песни
+type SongRemoveDtoIn struct {
 	Group string `form:"group"`
 	Name  string `form:"song"`
 }
 
-// View поиска песен
-type SongSearchViewIn struct {
+// DTO поиска песен
+type SongSearchDtoIn struct {
 	Group       string `form:"group"`
 	Name        string `form:"song"`
 	Text        string `form:"text"`
@@ -33,31 +35,31 @@ type SongSearchViewIn struct {
 	ReleaseDate string `form:"releaseDate"`
 	Page        int    `form:"page"`
 	PageSize    int    `form:"pageSize"`
-} //@name SongSearchFilter
+}
 
-// View-ответ поиска песни
-type SongSearchViewOut struct {
+// DTO-ответ поиска песни
+type SongSearchDtoOut struct {
 	Group       string `json:"group"`
 	Name        string `json:"song"`
 	ReleaseDate string `json:"releaseDate"`
 	Link        string `json:"link"`
-} // @name SongDescription
+}
 
-// View информации песни
-type SongInfoViewIn struct {
+// DTO информации песни
+type SongInfoDtoIn struct {
 	Group string `form:"group"`
 	Name  string `form:"song"`
 }
 
-// View-ответ информации о песни
-type SongInfoViewOut struct {
+// DTO-ответ информации о песни
+type SongInfoDtoOut struct {
 	Text        string `json:"text"`
 	Link        string `json:"link"`
 	ReleaseDate string `json:"releaseDate"`
-} // @name SongDetail
+}
 
-// View получения текста песни с пагинацией по куплетам
-type SongGetVersesViewIn struct {
+// DTO получения текста песни с пагинацией по куплетам
+type SongGetVersesDtoIn struct {
 	Group    string `form:"group"`
 	Name     string `form:"song"`
 	Page     int    `form:"page"`

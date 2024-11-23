@@ -9,7 +9,7 @@ type SongRouter struct{}
 
 func (r *SongRouter) Route(route *gin.Engine) {
 	Controller := song.SongController{}
-	// route.GET("/song", Controller.GetSongs)
+
 	route.POST("/song", Controller.SongCreate)
 	route.PUT("/song", Controller.SongUpdate)
 	route.DELETE("/song", Controller.SongDelete)

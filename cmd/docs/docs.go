@@ -17,18 +17,18 @@ const docTemplate = `{
     "paths": {
         "/song": {
             "post": {
-                "description": "Добавляет новую песню",
+                "description": "Создает новую песню на основе входных данных",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Добавить новую песню",
+                "summary": "Создание песни",
                 "parameters": [
                     {
-                        "description": "Данные о песне в формате JSON",
-                        "name": "song",
+                        "description": "Входные данные для создания песни",
+                        "name": "input",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -38,13 +38,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Сообщение о успешном добавлении песни",
+                        "description": "ID созданной песни",
                         "schema": {
                             "type": "string"
                         }
                     },
                     "400": {
-                        "description": "Ошибка при обработке запроса",
+                        "description": "Описание ошибки",
                         "schema": {
                             "type": "string"
                         }

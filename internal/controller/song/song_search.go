@@ -22,7 +22,7 @@ func (controller *SongController) SongSearch(c *gin.Context) {
 	log.Infof(generalLog)
 
 	// Инициализация переменной для входных данных поиска песни
-	var input SongSearchDtoIn
+	var input SongSearchViewIn
 
 	// Проверка и привязка входных данных к переменной input
 	if err := c.ShouldBind(&input); err != nil {
@@ -33,7 +33,7 @@ func (controller *SongController) SongSearch(c *gin.Context) {
 	}
 
 	// Создание списка структур песен с данными
-	songs := []SongSearchDtoOut{
+	songs := []SongSearchViewOut{
 		{Group: "cool group", Name: "super song", ReleaseDate: "23.11.2024", Link: "https://"},
 		{Group: "nice gr", Name: "ok song", ReleaseDate: "10.11.2024", Link: "https://new"},
 	}

@@ -55,11 +55,11 @@ paths:
     post:
       consumes:
       - application/json
-      description: Добавляет новую песню
+      description: Создает новую песню на основе входных данных
       parameters:
-      - description: Данные о песне в формате JSON
+      - description: Входные данные для создания песни
         in: body
-        name: song
+        name: input
         required: true
         schema:
           $ref: '#/definitions/SongCreate'
@@ -67,14 +67,14 @@ paths:
       - application/json
       responses:
         "200":
-          description: Сообщение о успешном добавлении песни
+          description: ID созданной песни
           schema:
             type: string
         "400":
-          description: Ошибка при обработке запроса
+          description: Описание ошибки
           schema:
             type: string
-      summary: Добавить новую песню
+      summary: Создание песни
   /song/:
     delete:
       description: 'Удаляет песню по указанным параметрам: group и name.'

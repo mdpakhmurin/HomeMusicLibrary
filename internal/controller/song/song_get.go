@@ -13,7 +13,7 @@ import (
 // @Summary Получение информации о песне
 // @Description Получение информации о песне по заданной группе и названию
 // @Produce json
-// @Param song query SongInfoDtoIn true "Данные о песне"
+// @Param song query SongInfoViewIn true "Данные о песне"
 // @Success 200 {object} SongDetail
 // @Router /song/info [get]
 func (controller *SongController) SongGet(c *gin.Context) {
@@ -22,7 +22,7 @@ func (controller *SongController) SongGet(c *gin.Context) {
 	log.Infof(generalLog)
 
 	// Инициализация переменной для входных данных песни
-	var input SongInfoDtoIn
+	var input SongInfoViewIn
 
 	// Проверка и привязка входных данных к переменной input
 	if err := c.ShouldBind(&input); err != nil {
@@ -33,7 +33,7 @@ func (controller *SongController) SongGet(c *gin.Context) {
 	}
 
 	// Создание структуры песни с данными
-	song := SongInfoDtoOut{
+	song := SongInfoViewOut{
 		Text:        "aaaaaaaaaaaaaaaaaaaaaaaaaaa",
 		Link:        "https://2323",
 		ReleaseDate: "02.08.2009",

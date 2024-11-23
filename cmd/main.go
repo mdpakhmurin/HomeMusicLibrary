@@ -19,8 +19,8 @@ func main() {
 		log.Fatal("Ошибка чтение .env файла")
 	}
 
-	app := app.NewApp(os.Getenv("IP_ADDR"), os.Getenv("PORT"))
-	err = app.StartServer()
+	app := app.NewApp(os.Getenv("IP_ADDR"), os.Getenv("PORT"), os.Getenv("DB_CONN_STRING"))
+	err = app.StartApp()
 	if err != nil {
 		log.Fatalf("Работа сервера завершилась с ошибкой: %v", err)
 	}

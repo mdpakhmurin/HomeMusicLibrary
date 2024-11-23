@@ -21,7 +21,7 @@ func (controller *SongController) SongUpdate(c *gin.Context) {
 	generalLog := fmt.Sprintf("Запрос %s", c.Request.URL.Path)
 
 	// Инициализация переменной для входных данных обновления песни
-	var input SongUpdateDtoIn
+	var input SongUpdateViewIn
 
 	// Привязка входных данных к переменной input из JSON
 	if err := c.ShouldBindJSON(&input); err != nil {

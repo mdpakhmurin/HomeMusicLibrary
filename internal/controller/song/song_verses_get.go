@@ -12,7 +12,7 @@ import (
 // @Summary Получение текста песни
 // @Description Получение куплетов песни по заданным параметрам
 // @Produce json
-// @Param song query SongGetVersesDtoIn true "Данные о песне"
+// @Param song query SongGetVersesViewIn true "Данные о песне"
 // @Success 200 {array} string
 // @Router /song/verses [get]
 func (controller *SongController) SongVersesGet(c *gin.Context) {
@@ -21,7 +21,7 @@ func (controller *SongController) SongVersesGet(c *gin.Context) {
 	log.Infof(generalLog)
 
 	// Инициализация переменной для входных данных получения куплетов песни
-	var input SongGetVersesDtoIn
+	var input SongGetVersesViewIn
 
 	// Проверка и привязка входных данных к переменной input
 	if err := c.ShouldBind(&input); err != nil {
