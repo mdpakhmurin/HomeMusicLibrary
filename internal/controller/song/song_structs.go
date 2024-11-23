@@ -1,4 +1,4 @@
-package controller
+package song
 
 // DTO создания песни
 type SongCreateDtoIn struct {

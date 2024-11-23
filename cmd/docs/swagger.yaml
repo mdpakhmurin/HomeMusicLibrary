@@ -6,7 +6,6 @@ definitions:
       link:
         type: string
       releaseDate:
-        description: wewe
         type: string
       song:
         type: string

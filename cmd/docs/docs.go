@@ -262,7 +262,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "releaseDate": {
-                    "description": "wewe",
                     "type": "string"
                 },
                 "song": {
