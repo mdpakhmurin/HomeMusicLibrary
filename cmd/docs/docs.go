@@ -52,17 +52,17 @@ const docTemplate = `{
         },
         "/song/": {
             "put": {
-                "description": "Добавляет новую песню",
+                "description": "Обновляет песню с таким же названием и группой",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Обновляет песню с заданным названием и группой",
+                "summary": "Обновляет песню",
                 "parameters": [
                     {
-                        "description": "Данные о песне в формате JSON",
+                        "description": "Входные данные о песне",
                         "name": "song",
                         "in": "body",
                         "required": true,
@@ -73,16 +73,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Сообщение о успешном добавлении песни",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "Ok"
                     },
                     "400": {
-                        "description": "Ошибка при обработке запроса",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             },
@@ -100,12 +97,14 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "name": "group",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     },
                     {
                         "type": "string",
                         "name": "song",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -136,12 +135,14 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "name": "group",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     },
                     {
                         "type": "string",
                         "name": "song",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -216,16 +217,17 @@ const docTemplate = `{
         },
         "/song/verses": {
             "get": {
-                "description": "Получение куплетов песни по заданным параметрам",
+                "description": "Получение куплетов песни с пагинацией",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Получение текста песни",
+                "summary": "Получение куплетов песни",
                 "parameters": [
                     {
                         "type": "string",
                         "name": "group",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     },
                     {
                         "type": "integer",
@@ -240,18 +242,19 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "name": "song",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
+                        "description": "Ok"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             }
@@ -260,6 +263,10 @@ const docTemplate = `{
     "definitions": {
         "SongCreate": {
             "type": "object",
+            "required": [
+                "group",
+                "song"
+            ],
             "properties": {
                 "group": {
                     "type": "string"
@@ -297,6 +304,10 @@ const docTemplate = `{
         },
         "SongUpdate": {
             "type": "object",
+            "required": [
+                "group",
+                "song"
+            ],
             "properties": {
                 "group": {
                     "type": "string"

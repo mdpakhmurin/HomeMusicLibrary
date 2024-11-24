@@ -8,7 +8,7 @@ type SongCreateDtoIn struct {
 	Name        string
 	Text        string
 	Link        string
-	ReleaseDate time.Time
+	ReleaseDate *time.Time
 }
 
 // DTO обновления песни
@@ -17,7 +17,7 @@ type SongUpdateDtoIn struct {
 	Name        string
 	Text        string
 	Link        string
-	ReleaseDate time.Time
+	ReleaseDate *time.Time
 }
 
 // DTO поиска песен
@@ -36,7 +36,7 @@ type SongSearchDtoOut struct {
 	Id          int
 	Group       string
 	Name        string
-	ReleaseDate time.Time
+	ReleaseDate *time.Time
 	Link        string
 }
 
@@ -51,7 +51,7 @@ type SongInfoDtoOut struct {
 	Id          int
 	Text        string
 	Link        string
-	ReleaseDate time.Time
+	ReleaseDate *time.Time
 }
 
 // DTO получения текста песни с пагинацией по куплетам

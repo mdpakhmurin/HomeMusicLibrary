@@ -1,9 +1,12 @@
 package implementations
 
 import (
+	"strings"
+
 	"github.com/mdpakhmurin/HomeMusicLibrary/internal/repository"
 	"github.com/mdpakhmurin/HomeMusicLibrary/internal/repository/model"
 	"github.com/mdpakhmurin/HomeMusicLibrary/internal/service/dto"
+	"github.com/mdpakhmurin/HomeMusicLibrary/pkg/mathutils.go"
 	"github.com/pkg/errors"
 )
 
@@ -34,6 +37,26 @@ func (service *SongService) Create(song *dto.SongCreateDtoIn) (id int, err error
 	return id, nil
 }
 
+// Обновление песни с таким же названием и группой.
+// Возвращает id обновлённой записи.
+func (service *SongService) Update(song *dto.SongUpdateDtoIn) (id int, err error) {
+	songModel, err := repository.SongRepository.GetByName(song.Name, song.Group)
+	if err != nil {
+		return 0, errors.Wrapf(err, "ошибка в сервисе, при обновлении песни %v", song)
+	}
+
+	songModel.Text = song.Text
+	songModel.Link = song.Link
+	songModel.ReleaseDate = song.ReleaseDate
+
+	err = repository.SongRepository.Update(songModel)
+	if err != nil {
+		return 0, errors.Wrapf(err, "ошибка в сервисе, при обновлении песни %v", song)
+	}
+
+	return songModel.Id, nil
+}
+
 // Удаление песни. Возвращает id удаленной песни
 func (service *SongService) DeleteByName(songName string, groupName string) (id int, err error) {
 	songModel, err := repository.SongRepository.GetByName(songName, groupName)
@@ -53,7 +76,7 @@ func (service *SongService) DeleteByName(songName string, groupName string) (id 
 func (service *SongService) GetInfoByName(songName string, groupName string) (song *dto.SongInfoDtoOut, err error) {
 	songModel, err := repository.SongRepository.GetByName(songName, groupName)
 	if err != nil {
-		return nil, errors.Wrapf(err, "ошибка в сервисе, при удалении песни %v", song)
+		return nil, errors.Wrapf(err, "ошибка в сервисе, при получении песни %v", song)
 	}
 
 	return &dto.SongInfoDtoOut{
@@ -62,4 +85,31 @@ func (service *SongService) GetInfoByName(songName string, groupName string) (so
 		Link:        songModel.Link,
 		ReleaseDate: songModel.ReleaseDate,
 	}, nil
+}
+
+// Получение куплетов песни с пагинацией
+func (service *SongService) SongVersesGet(song *dto.SongGetVersesDtoIn) ([]string, error) {
+	songModel, err := repository.SongRepository.GetByName(song.Name, song.Group)
+	if err != nil {
+		return nil, errors.Wrapf(err, "ошибка в сервисе, при получении текста песни %v", song)
+	}
+
+	verses := strings.Split(songModel.Text, "\n\n")
+
+	page := song.Page
+	pageSize := song.PageSize
+	if page < 1 {
+		page = 1
+	}
+	if pageSize < 0 {
+		pageSize = 0
+	}
+
+	firstVerseId := (page - 1) * pageSize
+	firstVerseId = mathutils.BoundNumber(firstVerseId, 0, len(verses))
+
+	endVerseId := (page * song.PageSize)
+	endVerseId = mathutils.BoundNumber(endVerseId, 0, len(verses))
+
+	return verses[firstVerseId:endVerseId], nil
 }

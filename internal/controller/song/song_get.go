@@ -23,16 +23,15 @@ import (
 func (controller *SongController) SongInfo(c *gin.Context) {
 	// Создание общего лога для запроса
 	generalLog := getGeneralRequestInfo(c)
-	log.Infof(generalLog)
-
-	// Инициализация переменной для входных данных песни
-	var input SongInfoViewIn
 
 	// Получение входных данных
+	var input SongInfoViewIn
 	err := getRequestData(c, &input)
 	if err != nil {
 		return
 	}
+
+	log.Infof("%s. (%#v)", generalLog, input)
 
 	// Получение информации о песни
 	song, err := getSongInfo(c, &input)
@@ -44,24 +43,25 @@ func (controller *SongController) SongInfo(c *gin.Context) {
 	songJSON, err := json.Marshal(song)
 	if err != nil {
 		// В случае ошибки отправить ответ с кодом ошибки и сообщением об ошибке конвертации
-		log.Debugf("%s. Ошибка конвертации ответа в JSON (%v): %v", generalLog, song, err)
+		log.Debugf("%s. Ошибка конвертации ответа в JSON (%#v): %v", generalLog, song, err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ошибка конвертации ответа в JSON"})
 		return
 	}
 
 	// Отправка данных JSON в ответе
 	c.Data(http.StatusOK, "application/json", songJSON)
-	log.Infof("%s. Успешный ответ: %v", generalLog, string(songJSON))
+	log.Infof("%s. Успешный ответ: %#v", generalLog, input)
 }
 
-// Удаление песни с помощью сервиса
+// Получение  песни с помощью сервиса
 func getSongInfo(c *gin.Context, songView *SongInfoViewIn) (songResponseView *SongInfoViewOut, err error) {
+	generalLog := getGeneralRequestInfo(c)
+
 	song, err := service.SongService.GetInfoByName(songView.Name, songView.Group)
 	if err != nil {
-		errMsg := fmt.Sprintf("Ошибка получения песни (%s-%s)", songView.Name, songView.Group)
-		log.Debugf("%s. %s. %v", c.Request.URL.Path, errMsg, err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": errMsg})
-		return
+		log.Debugf("%s. Ошибка получения песни (%#v): %v.", generalLog, songView, err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("Ошибка получения песни (%s: %s)", songView.Group, songView.Name)})
+		return nil, err
 	}
 
 	return &SongInfoViewOut{

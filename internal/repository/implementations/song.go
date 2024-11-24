@@ -44,6 +44,17 @@ func (s *SongRepository) GetByName(songName string, groupName string) (song *mod
 	return song, err
 }
 
+// Обновление песни.
+func (s *SongRepository) Update(song *model.Song) (err error) {
+	result := s.db.Updates(song)
+	err = result.Error
+	if err != nil {
+		return errors.Wrapf(err, "ошибка в репозитории песни, при обновлении сущности  %v", song)
+	}
+
+	return nil
+}
+
 // Удаление песни
 func (s *SongRepository) Delete(song *model.Song) (err error) {
 	result := s.db.Where(song).Delete(song)

@@ -11,6 +11,9 @@ definitions:
         type: string
       text:
         type: string
+    required:
+    - group
+    - song
     type: object
   SongDescription:
     properties:
@@ -35,6 +38,9 @@ definitions:
         type: string
       text:
         type: string
+    required:
+    - group
+    - song
     type: object
 info:
   contact: {}
@@ -74,9 +80,11 @@ paths:
       parameters:
       - in: query
         name: group
+        required: true
         type: string
       - in: query
         name: song
+        required: true
         type: string
       produces:
       - application/json
@@ -91,9 +99,9 @@ paths:
     put:
       consumes:
       - application/json
-      description: Добавляет новую песню
+      description: Обновляет песню с таким же названием и группой
       parameters:
-      - description: Данные о песне в формате JSON
+      - description: Входные данные о песне
         in: body
         name: song
         required: true
@@ -103,14 +111,12 @@ paths:
       - application/json
       responses:
         "200":
-          description: Сообщение о успешном добавлении песни
-          schema:
-            type: string
+          description: Ok
         "400":
-          description: Ошибка при обработке запроса
-          schema:
-            type: string
-      summary: Обновляет песню с заданным названием и группой
+          description: Bad request
+        "500":
+          description: Internal server error
+      summary: Обновляет песню
   /song/info:
     get:
       consumes:
@@ -120,9 +126,11 @@ paths:
       parameters:
       - in: query
         name: group
+        required: true
         type: string
       - in: query
         name: song
+        required: true
         type: string
       produces:
       - application/json
@@ -171,10 +179,11 @@ paths:
       summary: Поиск песни
   /song/verses:
     get:
-      description: Получение куплетов песни по заданным параметрам
+      description: Получение куплетов песни с пагинацией
       parameters:
       - in: query
         name: group
+        required: true
         type: string
       - in: query
         name: page
@@ -184,15 +193,16 @@ paths:
         type: integer
       - in: query
         name: song
+        required: true
         type: string
       produces:
       - application/json
       responses:
         "200":
-          description: OK
-          schema:
-            items:
-              type: string
-            type: array
-      summary: Получение текста песни
+          description: Ok
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      summary: Получение куплетов песни
 swagger: "2.0"

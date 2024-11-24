@@ -11,6 +11,9 @@ type SongRepository interface {
 	// Удаление песни.
 	Delete(song *model.Song) (err error)
 
+	// Обновление песни.
+	Update(song *model.Song) (err error)
+
 	// Получение песни по имение.
 	GetByName(songName string, groupName string) (song *model.Song, err error)
 }

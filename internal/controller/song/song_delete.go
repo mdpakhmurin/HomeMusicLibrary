@@ -22,7 +22,6 @@ import (
 func (controller *SongController) SongDelete(c *gin.Context) {
 	// Создание общего лога для запроса
 	generalLog := getGeneralRequestInfo(c)
-	log.Infof(generalLog)
 
 	// Инициализация переменной для входных данных удаления песни
 	var input SongDeleteViewIn
@@ -31,6 +30,8 @@ func (controller *SongController) SongDelete(c *gin.Context) {
 		return
 	}
 
+	log.Infof("%s. (%#v)", generalLog, input)
+
 	// Удаление песни
 	songId, err := songDelete(c, &input)
 	if err != nil {
@@ -38,18 +39,18 @@ func (controller *SongController) SongDelete(c *gin.Context) {
 	}
 
 	// Отправка ответа с сообщением об успешном удалении
-	c.JSON(http.StatusOK, gin.H{"message": songId})
-	log.Infof("%s. Успешное удаление песни с id: %d", generalLog, songId)
+	c.JSON(http.StatusOK, gin.H{"id": songId})
+	log.Infof("%s. Успешное удаление песни с id %d: %#v", generalLog, songId, input)
 }
 
 // Удаление песни с помощью сервиса
 func songDelete(c *gin.Context, songView *SongDeleteViewIn) (id int, err error) {
+
 	// Удаление песни
 	id, err = service.SongService.DeleteByName(songView.Name, songView.Group)
 	if err != nil {
-		errMsg := fmt.Sprintf("Ошибка удаления песни (%s-%s).", songView.Name, songView.Group)
-		log.Debugf("%s. %s. %v", c.Request.URL.Path, errMsg, err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": errMsg})
+		log.Debugf("%s. Ошибка удаления песни (%#v): %v.", getGeneralRequestInfo(c), songView, err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("Ошибка удаления песни (%s-%s).", songView.Name, songView.Group)})
 		return
 	}
 

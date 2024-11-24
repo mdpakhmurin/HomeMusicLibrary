@@ -5,40 +5,68 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mdpakhmurin/HomeMusicLibrary/internal/service"
+	"github.com/mdpakhmurin/HomeMusicLibrary/internal/service/dto"
 	log "github.com/sirupsen/logrus"
 )
 
-// @Summary Обновляет песню с заданным названием и группой
-// @Description Добавляет новую песню
+// @Summary Обновляет песню
+// @Description Обновляет песню с таким же названием и группой
 // @Accept json
 // @Produce json
-// @Param song body SongUpdate true "Данные о песне в формате JSON"
-// @Success 200 {string} string "Сообщение о успешном добавлении песни"
-// @Failure 400 {object} string "Ошибка при обработке запроса"
+// @Param song body SongUpdate true "Входные данные о песне"
+// @Success 200  "Ok"
+// @Failure 400 "Bad request"
+// @Failure 500 "Internal server error"
 // @Router /song/ [put]
 func (controller *SongController) SongUpdate(c *gin.Context) {
 	// Создание общего лога для запроса
-	generalLog := fmt.Sprintf("Запрос %s", c.Request.URL.Path)
+	generalLog := getGeneralRequestInfo(c)
 
-	// Инициализация переменной для входных данных обновления песни
+	// Получение входных данных
 	var input SongUpdateViewIn
-
-	// Привязка входных данных к переменной input из JSON
-	if err := c.ShouldBindJSON(&input); err != nil {
-		// В случае ошибки отправить ответ с кодом ошибки и сообщением об ошибке
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		log.Debugf("%s. Ошибка при получении данных из запроса: %v", generalLog, err)
+	err := getBodyData(c, &input)
+	if err != nil {
 		return
 	}
 
-	// Обновление общего лога с полученными данными
-	generalLog = fmt.Sprintf("%s. %v", generalLog, input)
-	log.Info(generalLog)
+	log.Infof("%s. (%#v)", generalLog, input)
 
-	// Формирование ответного сообщения об успешном обновлении песни
-	answer := fmt.Sprintf("Песня (%s: %s) успешно обновлена", input.Group, input.Name)
+	// Обновление песни
+	id, err := songUpdate(c, &input)
+	if err != nil {
+		return
+	}
 
-	// Отправка ответа с сообщением об успешном обновлении
-	c.JSON(http.StatusOK, gin.H{"message": answer})
-	log.Infof("%s. Успешное обновление", generalLog)
+	// Отправка ответа с ID
+	c.JSON(http.StatusOK, gin.H{"id": id})
+	log.Infof("%s. Успешное обновление песни %#v", generalLog, input)
+}
+
+// Обновление песни с помощью сервиса
+func songUpdate(c *gin.Context, songView *SongUpdateViewIn) (id int, err error) {
+	// Получение даты
+	releaseDate, err := parseDate(c, songView.ReleaseDate)
+	if err != nil {
+		return 0, err
+	}
+
+	// Конвертация в DTO
+	songDto := dto.SongUpdateDtoIn{
+		Group:       songView.Group,
+		Name:        songView.Name,
+		Text:        songView.Text,
+		Link:        songView.Link,
+		ReleaseDate: releaseDate,
+	}
+
+	// Обновление песни
+	id, err = service.SongService.Update(&songDto)
+	if err != nil {
+		log.Debugf("%s. Ошибка обновления песни (%#v): %v.", getGeneralRequestInfo(c), songView, err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("Ошибка обновления песни (%s: %s).", songDto.Group, songDto.Name)})
+		return
+	}
+
+	return id, nil
 }

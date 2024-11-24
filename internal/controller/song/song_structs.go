@@ -2,8 +2,8 @@ package song
 
 // View создания песни
 type SongCreateViewIn struct {
-	Group       string `json:"group"`
-	Name        string `json:"song"`
+	Group       string `json:"group" binding:"required"`
+	Name        string `json:"song" binding:"required"`
 	Text        string `json:"text"`
 	Link        string `json:"link"`
 	ReleaseDate string `json:"releaseDate"`
@@ -11,8 +11,8 @@ type SongCreateViewIn struct {
 
 // View обновления песни
 type SongUpdateViewIn struct {
-	Group       string `json:"group"`
-	Name        string `json:"song"`
+	Group       string `json:"group" binding:"required"`
+	Name        string `json:"song" binding:"required"`
 	Text        string `json:"text"`
 	Link        string `json:"link"`
 	ReleaseDate string `json:"releaseDate"`
@@ -20,8 +20,8 @@ type SongUpdateViewIn struct {
 
 // View удаления песни
 type SongDeleteViewIn struct {
-	Group string `form:"group"`
-	Name  string `form:"song"`
+	Group string `form:"group" binding:"required"`
+	Name  string `form:"song" binding:"required"`
 }
 
 // View поиска песен
@@ -45,8 +45,8 @@ type SongSearchViewOut struct {
 
 // View информации песни
 type SongInfoViewIn struct {
-	Group string `form:"group"`
-	Name  string `form:"song"`
+	Group string `form:"group" binding:"required"`
+	Name  string `form:"song" binding:"required"`
 }
 
 // View-ответ информации о песни
@@ -58,8 +58,8 @@ type SongInfoViewOut struct {
 
 // View получения текста песни с пагинацией по куплетам
 type SongGetVersesViewIn struct {
-	Group    string `form:"group"`
-	Name     string `form:"song"`
+	Group    string `form:"group" binding:"required"`
+	Name     string `form:"song" binding:"required"`
 	Page     int    `form:"page"`
 	PageSize int    `form:"pageSize"`
 }
