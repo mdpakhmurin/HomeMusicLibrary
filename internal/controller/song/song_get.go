@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mdpakhmurin/HomeMusicLibrary/internal/controller/views"
 	"github.com/mdpakhmurin/HomeMusicLibrary/internal/service"
 	log "github.com/sirupsen/logrus"
 )
@@ -15,7 +16,7 @@ import (
 // @ID SongInfo
 // @Accept json
 // @Produce json
-// @Param input query SongInfoViewIn true "Входные данные для получения информации о песне"
+// @Param input query views.SongInfoViewIn true "Входные данные для получения информации о песне"
 // @Success 200  "Ok"
 // @Failure 400 "Bad request"
 // @Failure 500 "Internal server error"
@@ -25,7 +26,7 @@ func (controller *SongController) SongInfo(c *gin.Context) {
 	generalLog := getGeneralRequestInfo(c)
 
 	// Получение входных данных
-	var input SongInfoViewIn
+	var input views.SongInfoViewIn
 	err := getRequestData(c, &input)
 	if err != nil {
 		return
@@ -53,8 +54,8 @@ func (controller *SongController) SongInfo(c *gin.Context) {
 	log.Infof("%s. Успешный ответ: %#v", generalLog, input)
 }
 
-// Получение  песни с помощью сервиса
-func getSongInfo(c *gin.Context, songView *SongInfoViewIn) (songResponseView *SongInfoViewOut, err error) {
+// Получение  песни с помощью сервиса.
+func getSongInfo(c *gin.Context, songView *views.SongInfoViewIn) (songResponseView *views.SongInfoViewOut, err error) {
 	generalLog := getGeneralRequestInfo(c)
 
 	song, err := service.SongService.GetInfoByName(songView.Name, songView.Group)
@@ -64,9 +65,9 @@ func getSongInfo(c *gin.Context, songView *SongInfoViewIn) (songResponseView *So
 		return nil, err
 	}
 
-	return &SongInfoViewOut{
+	return &views.SongInfoViewOut{
 		Text:        song.Text,
 		Link:        song.Link,
-		ReleaseDate: song.ReleaseDate.Format("02.01.2006"),
+		ReleaseDate: dateToString(song.ReleaseDate),
 	}, nil
 }

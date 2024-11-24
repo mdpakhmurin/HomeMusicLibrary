@@ -5,16 +5,17 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mdpakhmurin/HomeMusicLibrary/internal/controller/views"
 	"github.com/mdpakhmurin/HomeMusicLibrary/internal/service"
 	"github.com/mdpakhmurin/HomeMusicLibrary/internal/service/dto"
 	log "github.com/sirupsen/logrus"
 )
 
-// SongVersesGet получение куплетов песни.
+// SongVersesGet получение куплетов песни
 // @Summary Получение куплетов песни
 // @Description Получение куплетов песни с пагинацией
 // @Produce json
-// @Param song query SongGetVersesViewIn true "Данные о песне"
+// @Param song query views.SongGetVersesViewIn true "Данные о песне"
 // @Success 200  "Ok"
 // @Failure 400 "Bad request"
 // @Failure 500 "Internal server error"
@@ -24,7 +25,7 @@ func (controller *SongController) SongVersesGet(c *gin.Context) {
 	generalLog := getGeneralRequestInfo(c)
 
 	// Получение входных данных
-	var input SongGetVersesViewIn
+	var input views.SongGetVersesViewIn
 	err := getRequestData(c, &input)
 	if err != nil {
 		return
@@ -43,8 +44,8 @@ func (controller *SongController) SongVersesGet(c *gin.Context) {
 	log.Infof("%s. Успешный ответ: %#v", generalLog, verses)
 }
 
-// Получение куплетов песни с помощью сервиса
-func songVersesGet(c *gin.Context, songView *SongGetVersesViewIn) (verses []string, err error) {
+// Получение куплетов песни с помощью сервиса.
+func songVersesGet(c *gin.Context, songView *views.SongGetVersesViewIn) (verses []string, err error) {
 	// Конвертация в DTO
 	songDto := dto.SongGetVersesDtoIn{
 		Group:    songView.Group,

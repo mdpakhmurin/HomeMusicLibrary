@@ -2,7 +2,7 @@ package interfaces
 
 import "github.com/mdpakhmurin/HomeMusicLibrary/internal/service/dto"
 
-// Интерфейс сервиса песен
+// Интерфейс сервиса песен.
 type SongService interface {
 	// Создание песни.
 	// Возвращает id созданной песни.d
@@ -19,6 +19,10 @@ type SongService interface {
 	// Возвращает id удаленной песни.
 	DeleteByName(songName string, groupName string) (id int, err error)
 
-	// Получение текста песни (с пагинацией)
+	// Получение текста песни (с пагинацией).
 	SongVersesGet(song *dto.SongGetVersesDtoIn) ([]string, error)
+
+	// Поиск песен (с пагинацией).
+	// Возвращает список песен отсортированных по названию.
+	SongSearch(song *dto.SongSearchDtoIn) ([]*dto.SongSearchDtoOut, error)
 }

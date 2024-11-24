@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mdpakhmurin/HomeMusicLibrary/internal/controller/views"
 	"github.com/mdpakhmurin/HomeMusicLibrary/internal/service"
 	"github.com/mdpakhmurin/HomeMusicLibrary/internal/service/dto"
 	log "github.com/sirupsen/logrus"
@@ -15,7 +16,7 @@ import (
 // @ID SongCreate
 // @Accept json
 // @Produce json
-// @Param input body SongCreateViewIn true "Входные данные для создания песни"
+// @Param input body views.SongCreateViewIn true "Входные данные для создания песни"
 // @Success 200  "Ok"
 // @Failure 400 "Bad request"
 // @Failure 500 "Internal server error"
@@ -25,7 +26,7 @@ func (controller *SongController) SongCreate(c *gin.Context) {
 	generalLog := getGeneralRequestInfo(c)
 
 	// Получение входных данных
-	var input SongCreateViewIn
+	var input views.SongCreateViewIn
 	err := getBodyData(c, &input)
 	if err != nil {
 		return
@@ -44,8 +45,8 @@ func (controller *SongController) SongCreate(c *gin.Context) {
 	log.Infof("%s. Успешное добавление песни: %#v", generalLog, input)
 }
 
-// Создание песни с помощью сервиса
-func songCreate(c *gin.Context, songView *SongCreateViewIn) (id int, err error) {
+// Создание песни с помощью сервиса.
+func songCreate(c *gin.Context, songView *views.SongCreateViewIn) (id int, err error) {
 	// Получение даты
 	releaseDate, err := parseDate(c, songView.ReleaseDate)
 	if err != nil {

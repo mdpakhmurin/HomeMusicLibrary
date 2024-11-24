@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mdpakhmurin/HomeMusicLibrary/internal/controller/views"
 	"github.com/mdpakhmurin/HomeMusicLibrary/internal/service"
 	log "github.com/sirupsen/logrus"
 )
@@ -14,7 +15,7 @@ import (
 // @ID SongDelete
 // @Accept json
 // @Produce json
-// @Param input query SongDeleteViewIn true "Входные данные для удаления песни"
+// @Param input query views.SongDeleteViewIn true "Входные данные для удаления песни"
 // @Success 200 "Ok"
 // @Failure 400 "Bad request"
 // @Failure 500 "Internal server error"
@@ -24,7 +25,7 @@ func (controller *SongController) SongDelete(c *gin.Context) {
 	generalLog := getGeneralRequestInfo(c)
 
 	// Инициализация переменной для входных данных удаления песни
-	var input SongDeleteViewIn
+	var input views.SongDeleteViewIn
 	err := getRequestData(c, &input)
 	if err != nil {
 		return
@@ -43,8 +44,8 @@ func (controller *SongController) SongDelete(c *gin.Context) {
 	log.Infof("%s. Успешное удаление песни с id %d: %#v", generalLog, songId, input)
 }
 
-// Удаление песни с помощью сервиса
-func songDelete(c *gin.Context, songView *SongDeleteViewIn) (id int, err error) {
+// Удаление песни с помощью сервиса.
+func songDelete(c *gin.Context, songView *views.SongDeleteViewIn) (id int, err error) {
 
 	// Удаление песни
 	id, err = service.SongService.DeleteByName(songView.Name, songView.Group)

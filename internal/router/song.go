@@ -5,8 +5,10 @@ import (
 	"github.com/mdpakhmurin/HomeMusicLibrary/internal/controller/song"
 )
 
+// Роутер для песен
 type SongRouter struct{}
 
+// Регистрации путей роутером
 func (r *SongRouter) Route(route *gin.Engine) {
 	Controller := song.SongController{}
 

@@ -96,12 +96,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Название группы (обязательно).",
                         "name": "group",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
+                        "description": "Название песни (обязательно).",
                         "name": "song",
                         "in": "query",
                         "required": true
@@ -134,12 +136,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Название группы (обязательно).",
                         "name": "group",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
+                        "description": "Название песни (обязательно).",
                         "name": "song",
                         "in": "query",
                         "required": true
@@ -160,57 +164,70 @@ const docTemplate = `{
         },
         "/song/search": {
             "get": {
-                "description": "Поиск песни по заданным параметрам",
+                "description": "Поиск песни по заданным параметрам.",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Поиск песни",
+                "summary": "Поиск песни.",
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Текст встречающийся в названии группы.",
                         "name": "group",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "description": "Текст встречающийся в ссылке.",
                         "name": "link",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "description": "Номер страницы.",
                         "name": "page",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "description": "Размер страницы.",
                         "name": "pageSize",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "name": "releaseDate",
+                        "description": "Конечная дата периода поиска песни.",
+                        "name": "releaseEndDate",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "description": "Начальная дата периода поиска песни.",
+                        "name": "releaseStartDate",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Текст встречающийся в названии песни.",
                         "name": "song",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "description": "Текст встречающийся в тексте песни.",
                         "name": "text",
                         "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/SongDescription"
-                            }
-                        }
+                        "description": "Ok"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             }
@@ -225,22 +242,26 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Название группы (обязательно).",
                         "name": "group",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "integer",
+                        "description": "Номер страницы.",
                         "name": "page",
                         "in": "query"
                     },
                     {
                         "type": "integer",
+                        "description": "Размер страницы.",
                         "name": "pageSize",
                         "in": "query"
                     },
                     {
                         "type": "string",
+                        "description": "Название песни (обязательно).",
                         "name": "song",
                         "in": "query",
                         "required": true
@@ -269,35 +290,23 @@ const docTemplate = `{
             ],
             "properties": {
                 "group": {
+                    "description": "Название группы (обязательно).",
                     "type": "string"
                 },
                 "link": {
+                    "description": "Ссылка на песню.",
                     "type": "string"
                 },
                 "releaseDate": {
+                    "description": "Дата создания песни.",
                     "type": "string"
                 },
                 "song": {
+                    "description": "Название песни (обязательно).",
                     "type": "string"
                 },
                 "text": {
-                    "type": "string"
-                }
-            }
-        },
-        "SongDescription": {
-            "type": "object",
-            "properties": {
-                "group": {
-                    "type": "string"
-                },
-                "link": {
-                    "type": "string"
-                },
-                "releaseDate": {
-                    "type": "string"
-                },
-                "song": {
+                    "description": "Текст песни.",
                     "type": "string"
                 }
             }
@@ -310,18 +319,23 @@ const docTemplate = `{
             ],
             "properties": {
                 "group": {
+                    "description": "Название группы (обязательно).",
                     "type": "string"
                 },
                 "link": {
+                    "description": "Ссылка на песню.",
                     "type": "string"
                 },
                 "releaseDate": {
+                    "description": "Дата создания песни.",
                     "type": "string"
                 },
                 "song": {
+                    "description": "Название песни (обязательно).",
                     "type": "string"
                 },
                 "text": {
+                    "description": "Текст песни.",
                     "type": "string"
                 }
             }

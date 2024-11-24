@@ -9,7 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// Контроллер песен
+// Контроллер песен.d
 type SongController struct {
 }
 
@@ -59,4 +59,13 @@ func parseDate(c *gin.Context, timeStr string) (date *time.Time, err error) {
 	}
 
 	return &dateParseResult, nil
+}
+
+// Конвертация даты в строку.
+func dateToString(date *time.Time) (dateStr string) {
+	if date == nil {
+		return ""
+	}
+
+	return date.Format("02.01.2006")
 }

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mdpakhmurin/HomeMusicLibrary/internal/controller/views"
 	"github.com/mdpakhmurin/HomeMusicLibrary/internal/service"
 	"github.com/mdpakhmurin/HomeMusicLibrary/internal/service/dto"
 	log "github.com/sirupsen/logrus"
@@ -24,7 +25,7 @@ func (controller *SongController) SongUpdate(c *gin.Context) {
 	generalLog := getGeneralRequestInfo(c)
 
 	// Получение входных данных
-	var input SongUpdateViewIn
+	var input views.SongUpdateViewIn
 	err := getBodyData(c, &input)
 	if err != nil {
 		return
@@ -43,8 +44,8 @@ func (controller *SongController) SongUpdate(c *gin.Context) {
 	log.Infof("%s. Успешное обновление песни %#v", generalLog, input)
 }
 
-// Обновление песни с помощью сервиса
-func songUpdate(c *gin.Context, songView *SongUpdateViewIn) (id int, err error) {
+// Обновление песни с помощью сервиса.
+func songUpdate(c *gin.Context, songView *views.SongUpdateViewIn) (id int, err error) {
 	// Получение даты
 	releaseDate, err := parseDate(c, songView.ReleaseDate)
 	if err != nil {

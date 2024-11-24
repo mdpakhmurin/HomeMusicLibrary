@@ -2,41 +2,40 @@ definitions:
   SongCreate:
     properties:
       group:
+        description: Название группы (обязательно).
         type: string
       link:
+        description: Ссылка на песню.
         type: string
       releaseDate:
+        description: Дата создания песни.
         type: string
       song:
+        description: Название песни (обязательно).
         type: string
       text:
+        description: Текст песни.
         type: string
     required:
     - group
     - song
     type: object
-  SongDescription:
-    properties:
-      group:
-        type: string
-      link:
-        type: string
-      releaseDate:
-        type: string
-      song:
-        type: string
-    type: object
   SongUpdate:
     properties:
       group:
+        description: Название группы (обязательно).
         type: string
       link:
+        description: Ссылка на песню.
         type: string
       releaseDate:
+        description: Дата создания песни.
         type: string
       song:
+        description: Название песни (обязательно).
         type: string
       text:
+        description: Текст песни.
         type: string
     required:
     - group
@@ -78,11 +77,13 @@ paths:
       description: Удаляет песню по указанному идентификатору
       operationId: SongDelete
       parameters:
-      - in: query
+      - description: Название группы (обязательно).
+        in: query
         name: group
         required: true
         type: string
-      - in: query
+      - description: Название песни (обязательно).
+        in: query
         name: song
         required: true
         type: string
@@ -124,11 +125,13 @@ paths:
       description: Возвращает информацию о песни на основе входных данных
       operationId: SongInfo
       parameters:
-      - in: query
+      - description: Название группы (обязательно).
+        in: query
         name: group
         required: true
         type: string
-      - in: query
+      - description: Название песни (обязательно).
+        in: query
         name: song
         required: true
         type: string
@@ -144,54 +147,69 @@ paths:
       summary: Получение информации о песни
   /song/search:
     get:
-      description: Поиск песни по заданным параметрам
+      description: Поиск песни по заданным параметрам.
       parameters:
-      - in: query
+      - description: Текст встречающийся в названии группы.
+        in: query
         name: group
         type: string
-      - in: query
+      - description: Текст встречающийся в ссылке.
+        in: query
         name: link
         type: string
-      - in: query
+      - description: Номер страницы.
+        in: query
         name: page
         type: integer
-      - in: query
+      - description: Размер страницы.
+        in: query
         name: pageSize
         type: integer
-      - in: query
-        name: releaseDate
+      - description: Конечная дата периода поиска песни.
+        in: query
+        name: releaseEndDate
         type: string
-      - in: query
+      - description: Начальная дата периода поиска песни.
+        in: query
+        name: releaseStartDate
+        type: string
+      - description: Текст встречающийся в названии песни.
+        in: query
         name: song
         type: string
-      - in: query
+      - description: Текст встречающийся в тексте песни.
+        in: query
         name: text
         type: string
       produces:
       - application/json
       responses:
         "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/SongDescription'
-            type: array
-      summary: Поиск песни
+          description: Ok
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      summary: Поиск песни.
   /song/verses:
     get:
       description: Получение куплетов песни с пагинацией
       parameters:
-      - in: query
+      - description: Название группы (обязательно).
+        in: query
         name: group
         required: true
         type: string
-      - in: query
+      - description: Номер страницы.
+        in: query
         name: page
         type: integer
-      - in: query
+      - description: Размер страницы.
+        in: query
         name: pageSize
         type: integer
-      - in: query
+      - description: Название песни (обязательно).
+        in: query
         name: song
         required: true
         type: string

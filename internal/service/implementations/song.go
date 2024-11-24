@@ -4,23 +4,24 @@ import (
 	"strings"
 
 	"github.com/mdpakhmurin/HomeMusicLibrary/internal/repository"
+	"github.com/mdpakhmurin/HomeMusicLibrary/internal/repository/dao"
 	"github.com/mdpakhmurin/HomeMusicLibrary/internal/repository/model"
 	"github.com/mdpakhmurin/HomeMusicLibrary/internal/service/dto"
 	"github.com/mdpakhmurin/HomeMusicLibrary/pkg/mathutils.go"
 	"github.com/pkg/errors"
 )
 
-// Сервис песен
+// Сервис песен.
 type SongService struct {
 }
 
-// Создание нового экземпляра сервиса песен
+// Создание нового экземпляра сервиса песен.
 func NewSongService() *SongService {
 	return &SongService{}
 }
 
 // Создание песни.
-// Возвращает id созданной песни
+// Возвращает id созданной песни.
 func (service *SongService) Create(song *dto.SongCreateDtoIn) (id int, err error) {
 	id, err = repository.SongRepository.Create(&model.Song{
 		Group:       song.Group,
@@ -57,7 +58,7 @@ func (service *SongService) Update(song *dto.SongUpdateDtoIn) (id int, err error
 	return songModel.Id, nil
 }
 
-// Удаление песни. Возвращает id удаленной песни
+// Удаление песни. Возвращает id удаленной песни.
 func (service *SongService) DeleteByName(songName string, groupName string) (id int, err error) {
 	songModel, err := repository.SongRepository.GetByName(songName, groupName)
 	if err != nil {
@@ -72,7 +73,7 @@ func (service *SongService) DeleteByName(songName string, groupName string) (id 
 	return songModel.Id, nil
 }
 
-// Получение песни по названию (точное совпадение)
+// Получение песни по названию (точное совпадение).
 func (service *SongService) GetInfoByName(songName string, groupName string) (song *dto.SongInfoDtoOut, err error) {
 	songModel, err := repository.SongRepository.GetByName(songName, groupName)
 	if err != nil {
@@ -87,7 +88,7 @@ func (service *SongService) GetInfoByName(songName string, groupName string) (so
 	}, nil
 }
 
-// Получение куплетов песни с пагинацией
+// Получение куплетов песни (с пагинацией).
 func (service *SongService) SongVersesGet(song *dto.SongGetVersesDtoIn) ([]string, error) {
 	songModel, err := repository.SongRepository.GetByName(song.Name, song.Group)
 	if err != nil {
@@ -112,4 +113,34 @@ func (service *SongService) SongVersesGet(song *dto.SongGetVersesDtoIn) ([]strin
 	endVerseId = mathutils.BoundNumber(endVerseId, 0, len(verses))
 
 	return verses[firstVerseId:endVerseId], nil
+}
+
+// Поиск песен (с пагинацией).
+// Воззвращает список песен с сортировкой по названию.
+func (service *SongService) SongSearch(song *dto.SongSearchDtoIn) (songs []*dto.SongSearchDtoOut, err error) {
+	songsModels, err := repository.SongRepository.Search(&dao.SongSearchParams{
+		Group:            song.Group,
+		Name:             song.Name,
+		Text:             song.Text,
+		Link:             song.Link,
+		ReleaseStartDate: song.ReleaseStartDate,
+		ReleaseEndDate:   song.ReleaseEndDate,
+		Page:             song.Page,
+		PageSize:         song.PageSize,
+	})
+	if err != nil {
+		return nil, errors.Wrapf(err, "ошибка в сервисе, при поиске песен")
+	}
+
+	for _, songModel := range songsModels {
+		songs = append(songs, &dto.SongSearchDtoOut{
+			Id:          songModel.Id,
+			Link:        songModel.Link,
+			Group:       songModel.Group,
+			Name:        songModel.Name,
+			ReleaseDate: songModel.ReleaseDate,
+		})
+	}
+
+	return songs, nil
 }
