@@ -164,11 +164,11 @@ const docTemplate = `{
         },
         "/song/search": {
             "get": {
-                "description": "Поиск песни по заданным параметрам.",
+                "description": "Поиск песке по заданным параметрам. Вовзращает список песен, отсортированный по названию.",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Поиск песни.",
+                "summary": "Поиск песен с пагинацией.",
                 "parameters": [
                     {
                         "type": "string",

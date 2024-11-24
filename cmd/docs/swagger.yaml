@@ -147,7 +147,8 @@ paths:
       summary: Получение информации о песни
   /song/search:
     get:
-      description: Поиск песни по заданным параметрам.
+      description: Поиск песке по заданным параметрам. Вовзращает список песен, отсортированный
+        по названию.
       parameters:
       - description: Текст встречающийся в названии группы.
         in: query
@@ -190,7 +191,7 @@ paths:
           description: Bad request
         "500":
           description: Internal server error
-      summary: Поиск песни.
+      summary: Поиск песен с пагинацией.
   /song/verses:
     get:
       description: Получение куплетов песни с пагинацией
